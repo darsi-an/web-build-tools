@@ -15,6 +15,8 @@ export {
   ITryFindRushJsonLocationOptions,
   ResolutionStrategy,
   PnpmOptionsConfiguration,
+  IPnpmOptionsJson as _IPnpmOptionsJson,
+  PnpmStoreOptions,
   YarnOptionsConfiguration
 } from './api/RushConfiguration';
 

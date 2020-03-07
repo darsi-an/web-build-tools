@@ -90,6 +90,7 @@ export const enum DependencyType {
 export const enum EnvironmentVariableNames {
     RUSH_ABSOLUTE_SYMLINKS = "RUSH_ABSOLUTE_SYMLINKS",
     RUSH_ALLOW_UNSUPPORTED_NODEJS = "RUSH_ALLOW_UNSUPPORTED_NODEJS",
+    RUSH_PNPM_STORE_PATH = "RUSH_PNPM_STORE_PATH",
     RUSH_PREVIEW_VERSION = "RUSH_PREVIEW_VERSION",
     RUSH_TEMP_FOLDER = "RUSH_TEMP_FOLDER",
     RUSH_VARIANT = "RUSH_VARIANT"
@@ -144,6 +145,13 @@ export class IndividualVersionPolicy extends VersionPolicy {
     validate(versionString: string, packageName: string): void;
 }
 
+// @internal
+export interface _IPnpmOptionsJson {
+    pnpmStore?: PnpmStoreOptions;
+    resolutionStrategy?: ResolutionStrategy;
+    strictPeerDependencies?: boolean;
+}
+
 // @public
 export interface ITryFindRushJsonLocationOptions {
     showVerbose?: boolean;
@@ -153,6 +161,7 @@ export interface ITryFindRushJsonLocationOptions {
 // @internal
 export class _LastInstallFlag {
     constructor(folderPath: string, state?: JsonObject);
+    checkValidAndReportStoreIssues(): boolean;
     clear(): void;
     create(): void;
     isValid(): boolean;
@@ -229,13 +238,16 @@ export type PackageManagerName = 'pnpm' | 'npm' | 'yarn';
 
 // @public
 export class PnpmOptionsConfiguration {
-    // Warning: (ae-forgotten-export) The symbol "IPnpmOptionsJson" needs to be exported by the entry point index.d.ts
-    //
     // @internal
-    constructor(json: IPnpmOptionsJson);
+    constructor(json: _IPnpmOptionsJson, commonTempFolder: string);
+    readonly pnpmStore: PnpmStoreOptions;
+    readonly pnpmStorePath: string;
     readonly resolutionStrategy: ResolutionStrategy;
     readonly strictPeerDependencies: boolean;
 }
+
+// @public
+export type PnpmStoreOptions = 'local' | 'global';
 
 // @public
 export type ResolutionStrategy = 'fewer-dependencies' | 'fast';
@@ -288,7 +300,6 @@ export class RushConfiguration {
     // @beta
     readonly packageManagerWrapper: PackageManager;
     readonly pnpmOptions: PnpmOptionsConfiguration;
-    readonly pnpmStoreFolder: string;
     readonly projectFolderMaxDepth: number;
     readonly projectFolderMinDepth: number;
     // (undocumented)

@@ -15,10 +15,6 @@
       "allowedCategories": [ "libraries" ]
     },
     {
-      "name": "@rushstack/debug-certificate-manager",
-      "allowedCategories": [ "libraries" ]
-    },
-    {
       "name": "@microsoft/decorators",
       "allowedCategories": [ "libraries" ]
     },
@@ -159,6 +155,10 @@
       "allowedCategories": [ "libraries" ]
     },
     {
+      "name": "@rushstack/debug-certificate-manager",
+      "allowedCategories": [ "libraries" ]
+    },
+    {
       "name": "@rushstack/eslint-config",
       "allowedCategories": [ "libraries", "tests" ]
     },
@@ -231,6 +231,10 @@
       "allowedCategories": [ "libraries" ]
     },
     {
+      "name": "chokidar",
+      "allowedCategories": [ "libraries" ]
+    },
+    {
       "name": "clean-css",
       "allowedCategories": [ "libraries" ]
     },
@@ -244,6 +248,10 @@
     },
     {
       "name": "deasync",
+      "allowedCategories": [ "libraries" ]
+    },
+    {
+      "name": "decache",
       "allowedCategories": [ "libraries" ]
     },
     {
@@ -391,6 +399,10 @@
       "allowedCategories": [ "libraries" ]
     },
     {
+      "name": "html-webpack-plugin",
+      "allowedCategories": [ "tests" ]
+    },
+    {
       "name": "https-proxy-agent",
       "allowedCategories": [ "libraries" ]
     },
@@ -440,7 +452,7 @@
     },
     {
       "name": "lodash",
-      "allowedCategories": [ "libraries" ]
+      "allowedCategories": [ "libraries", "tests" ]
     },
     {
       "name": "lodash.merge",
@@ -508,6 +520,10 @@
     },
     {
       "name": "pretty-hrtime",
+      "allowedCategories": [ "libraries" ]
+    },
+    {
+      "name": "pseudolocale",
       "allowedCategories": [ "libraries" ]
     },
     {
@@ -608,6 +624,10 @@
     },
     {
       "name": "xml",
+      "allowedCategories": [ "libraries" ]
+    },
+    {
+      "name": "xmldoc",
       "allowedCategories": [ "libraries" ]
     },
     {

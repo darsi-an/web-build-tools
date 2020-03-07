@@ -4,43 +4,41 @@
 
 ```ts
 
+import { loader } from 'webpack';
+import { Terminal } from '@microsoft/node-core-library';
 import * as Webpack from 'webpack';
 
 // @public (undocumented)
 export interface IDefaultLocaleOptions {
-    // (undocumented)
-    locale?: string;
-    passthroughLocaleName?: string;
-    // (undocumented)
-    usePassthroughLocale?: boolean;
+    fillMissingTranslationStrings?: boolean;
+    localeName: string;
 }
 
 // @public (undocumented)
-export interface ILocale {
+export interface ILocaleData {
     // (undocumented)
-    [locJsonFilePath: string]: ILocJsonFileData;
+    [locFilePath: string]: ILocaleFileData;
 }
 
 // @public (undocumented)
-export interface ILocales {
+export interface ILocaleElementMap {
     // (undocumented)
-    [locale: string]: ILocale;
+    [locale: string]: string;
+}
+
+// @public (undocumented)
+export interface ILocaleFileData {
+    // (undocumented)
+    [stringName: string]: string;
 }
 
 // @public
 export interface ILocalizationPluginOptions {
-    // (undocumented)
-    defaultLocale: IDefaultLocaleOptions;
-    // (undocumented)
     filesToIgnore?: string[];
-    // (undocumented)
-    localizationStatsCallback?: (stats: ILocalizationStats) => void;
-    // (undocumented)
-    localizationStatsDropPath?: string;
-    // (undocumented)
-    localizedStrings: ILocales;
-    // (undocumented)
-    serveLocale: IDefaultLocaleOptions;
+    localizationStats?: ILocalizationStatsOptions;
+    localizedData: ILocalizedData;
+    noStringsLocaleName?: string;
+    typingsOptions?: ITypingsGenerationOptions;
 }
 
 // @public (undocumented)
@@ -58,33 +56,103 @@ export interface ILocalizationStats {
 // @public (undocumented)
 export interface ILocalizationStatsChunkGroup {
     // (undocumented)
-    localizedAssets: {
-        [locale: string]: string;
-    };
+    localizedAssets: ILocaleElementMap;
 }
 
 // @public (undocumented)
 export interface ILocalizationStatsEntrypoint {
     // (undocumented)
-    localizedAssets: {
+    localizedAssets: ILocaleElementMap;
+}
+
+// @public
+export interface ILocalizationStatsOptions {
+    callback?: (stats: ILocalizationStats) => void;
+    dropPath?: string;
+}
+
+// @public (undocumented)
+export interface ILocalizedData {
+    defaultLocale: IDefaultLocaleOptions;
+    passthroughLocale?: IPassthroughLocaleOptions;
+    pseudolocales?: IPseudolocalesOptions;
+    translatedStrings: ILocalizedStrings;
+}
+
+// @internal (undocumented)
+export interface _ILocalizedString {
+    // (undocumented)
+    comment?: string;
+    // (undocumented)
+    value: string;
+}
+
+// @public (undocumented)
+export interface ILocalizedStrings {
+    // (undocumented)
+    [locale: string]: ILocaleData;
+}
+
+// @public (undocumented)
+export interface ILocalizedWebpackChunk extends Webpack.compilation.Chunk {
+    // (undocumented)
+    localizedFiles?: {
         [locale: string]: string;
     };
 }
 
-// @public (undocumented)
-export interface ILocJsonFileData {
+// @internal (undocumented)
+export interface _ILocFile {
     // (undocumented)
-    [stringName: string]: string;
+    [stringName: string]: _ILocalizedString;
 }
 
-// @public (undocumented)
-export interface ILocJsonPreprocessorOptions {
+// @internal (undocumented)
+export interface _ILoggerOptions {
     // (undocumented)
-    filesToIgnore?: string[];
+    writeError: (message: string) => void;
     // (undocumented)
-    generatedTsFolder: string;
+    writeWarning: (message: string) => void;
+}
+
+// @internal (undocumented)
+export interface _IParseLocFileOptions {
     // (undocumented)
-    srcFolder: string;
+    content: string;
+    // (undocumented)
+    filePath: string;
+    // (undocumented)
+    loggerOptions: _ILoggerOptions;
+}
+
+// @public
+export interface IPassthroughLocaleOptions {
+    passthroughLocaleName?: string;
+    usePassthroughLocale?: boolean;
+}
+
+// @public
+export interface IPseudolocaleOptions {
+    // (undocumented)
+    append?: string;
+    // (undocumented)
+    delimiter?: string;
+    // (undocumented)
+    endDelimiter?: string;
+    // (undocumented)
+    extend?: number;
+    // (undocumented)
+    override?: string;
+    // (undocumented)
+    prepend?: string;
+    // (undocumented)
+    startDelimiter?: string;
+}
+
+// @public
+export interface IPseudolocalesOptions {
+    // (undocumented)
+    [pseudoLocaleName: string]: IPseudolocaleOptions;
 }
 
 // @internal (undocumented)
@@ -96,18 +164,56 @@ export interface _IStringPlaceholder {
 }
 
 // @public
+export interface ITypingsGenerationOptions {
+    exportAsDefault?: boolean;
+    generatedTsFolder: string;
+    sourceRoot?: string;
+}
+
+// @public (undocumented)
+export interface ITypingsGeneratorOptions {
+    // (undocumented)
+    exportAsDefault?: boolean;
+    // (undocumented)
+    filesToIgnore?: string[];
+    // (undocumented)
+    generatedTsFolder: string;
+    // (undocumented)
+    srcFolder: string;
+    // (undocumented)
+    terminal?: Terminal;
+}
+
+// @public
 export class LocalizationPlugin implements Webpack.Plugin {
     constructor(options: ILocalizationPluginOptions);
+    // @internal (undocumented)
+    addDefaultLocFile(locFilePath: string, locFile: _ILocFile): void;
     // (undocumented)
     apply(compiler: Webpack.Compiler): void;
+    // Warning: (ae-forgotten-export) The symbol "IStringSerialNumberData" needs to be exported by the entry point index.d.ts
+    //
+    // @internal (undocumented)
+    getDataForSerialNumber(serialNumber: string): IStringSerialNumberData | undefined;
     // @internal (undocumented)
     stringKeys: Map<string, _IStringPlaceholder>;
     }
 
-// @public
-export class LocJsonPreprocessor {
+// @internal (undocumented)
+export class _LocFileParser {
     // (undocumented)
-    static preprocessLocJsonFiles(options: ILocJsonPreprocessorOptions): void;
+    static parseLocFile(options: _IParseLocFileOptions): _ILocFile;
+    // (undocumented)
+    static parseLocFileFromLoader(content: string, loaderContext: loader.LoaderContext): _ILocFile;
+}
+
+// @public
+export class TypingsGenerator {
+    constructor(options: ITypingsGeneratorOptions);
+    // (undocumented)
+    generateTypings(): void;
+    // (undocumented)
+    runWatcher(): void;
 }
 
 
